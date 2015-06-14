@@ -15,13 +15,10 @@
 FROM nginx
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends python-software-properties python-setuptools build-essential python-dev python git 
+RUN apt-get install -y --no-install-recommends python-software-properties python-setuptools build-essential python-dev python 
 RUN easy_install pip
 RUN pip install uwsgi
 RUN pip install flask 
-
-#ensure nginx starts automatically
-RUN update-rc.d nginx enable
 
 # install our code
 ADD . /home/docker/code/
@@ -29,11 +26,10 @@ ADD . /home/docker/code/
 # Configure Nginx
 RUN ln -s /home/docker/code/nginx-app.conf /etc/nginx/conf.d/
 
-# run pip install
+# Install Flask application requirements
 RUN pip install -r /home/docker/code/requirements.txt
 
 # Start uWSGI daemon
 EXPOSE 80 
-#CMD ["uwsgi", "-s", "/tmp/uwsgi.sock", "-w", "application:application", "--chown-socket=nginx:nginx"]
 CMD ["/home/docker/code/start.sh"]
 
