@@ -68,8 +68,7 @@ def store_in_dynamo(signup_data):
     table.put_item(
         Item=signup_data
     )
-
-print("PutItem succeeded:")
+    print("PutItem succeeded:")
 
 
 def create_table():
