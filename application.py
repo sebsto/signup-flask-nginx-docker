@@ -19,12 +19,7 @@ import json
 import flask
 from flask import request, Response
 
-from boto import dynamodb2
-from boto.dynamodb2.table import Table
-from boto.dynamodb2.items import Item
-from boto.dynamodb2.fields import HashKey
-from boto.dynamodb2.exceptions import ConditionalCheckFailedException
-from boto.exception import JSONResponseError
+import boto3
 
 print("Configue the application")
 # Default config vals
@@ -45,9 +40,8 @@ application.debug = application.config['FLASK_DEBUG'] in ['true', 'True']
 
 # Connect to DynamoDB and get refo to Table
 print("Connect to DynamoDB")
-ddb_conn = dynamodb2.connect_to_region(application.config['AWS_REGION'])
-ddb_table = Table(table_name=application.config['STARTUP_SIGNUP_TABLE'],
-                  connection=ddb_conn)
+ddb    = boto3.resource('dynamodb', region_name=application.config['AWS_REGION'])
+client = boto3.client('dynamodb', region_name=application.config['AWS_REGION'])
 
 @application.route('/')
 def welcome():
@@ -63,35 +57,45 @@ def signup():
 
     try:
         store_in_dynamo(signup_data)
-    except ConditionalCheckFailedException:
+    except client.exceptions.ConditionalCheckFailedException:
         return Response("", status=409, mimetype='application/json')
 
     return Response(json.dumps(signup_data), status=201, mimetype='application/json')
 
 
 def store_in_dynamo(signup_data):
-    signup_item = Item(ddb_table, data=signup_data)
-    signup_item.save()
+    table = ddb.Table(application.config['STARTUP_SIGNUP_TABLE'])
+    table.put_item(
+        Item=signup_data
+    )
+
+print("PutItem succeeded:")
 
 
 def create_table():
-    signups = Table.create(application.config['STARTUP_SIGNUP_TABLE'], 
-        schema=[
-            HashKey('email') # defaults to STRING data_type
+    ddb.create_table(
+        TableName=application.config['STARTUP_SIGNUP_TABLE'], 
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'email',
+                'AttributeType': 'S'
+            }
+        ],
+        KeySchema=[
+            {
+                'AttributeName': 'email',
+                'KeyType': 'HASH'
+            }
         ], 
-        throughput={
-            'read': 1,
-            'write': 1,
-        },
-        connection=ddb_conn
+        BillingMode='PAY_PER_REQUEST'
     )
 
 
 def init_db():
     try:
         print("Check DynamoDB table")
-        ddb_table.describe()
-    except JSONResponseError:
+        response = client.describe_table(TableName=application.config['STARTUP_SIGNUP_TABLE'])
+    except client.exceptions.ResourceNotFoundException as err:
         print("DynamoDB table doesn't exist, creating...")
         create_table()
 
