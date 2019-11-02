@@ -9,7 +9,7 @@
             "containerPort": 80
           }
         ],
-        "image": "486652066693.dkr.ecr.us-west-2.amazonaws.com/demo-flask-signup",
+        "image": "<IMAGE_NAME>",
         "name": "demo-flask-signup"
       }
     ],
