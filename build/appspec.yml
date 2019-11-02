@@ -1,17 +1,10 @@
-{
-  "version": 0.0,
-  "Resources": [
-    {
-      "TargetService": {
-        "Type": "AWS::ECS::Service",
-        "Properties": {
-          "TaskDefinition": "arn:aws:ecs:eu-west-1:486652066693:task-definition/CdkEcsClusterStackECSDemoFlaskClusterServiceTaskDef9F48BCB1:1",
-          "LoadBalancerInfo": {
-            "ContainerName": "demo-flask-signup",
-            "ContainerPort": 80
-          }
-        }
-      }
-    }
-  ]
-}
+
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: arn:aws:ecs:us-west-2:486652066693:task-definition/demo-flask-signup:2
+        LoadBalancerInfo:
+          ContainerName: "demo-flask-signup"
+          ContainerPort: 80
