@@ -1,0 +1,1 @@
+zip -r  ../signup-flask-nginx-docker.zip . -x ".git*" -x "ecs*"

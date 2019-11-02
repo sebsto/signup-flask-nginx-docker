@@ -107,15 +107,15 @@ export class CdkEcsPipelineStack extends cdk.Stack {
       pipelineName: 'ECSFlaskSignupDeploy',
       stages: [
         {
-          stageName: 'GetSource',
+          stageName: 'GetFlaskSignupSource',
           actions: [sourceAction],
         },
         {
-          stageName: 'BuildDockerImage',
+          stageName: 'BuildFlaskSignupDockerImage',
           actions: [buildAction]
         },
         {
-          stageName: 'DeployToEcs',
+          stageName: 'DeployFlaskSignupToEcs',
           actions: [deployAction]
         }
       ],
