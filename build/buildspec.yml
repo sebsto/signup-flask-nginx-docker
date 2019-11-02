@@ -27,7 +27,7 @@ phases:
       - echo Writing image definitions file...
 # https://docs.aws.amazon.com/en_pv/codepipeline/latest/userguide/file-reference.html#file-reference-ecs-bluegreen
 # ECS blue/green deployment uses imageDetail.json
-      - printf '{"imageUri":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
 # ECS standard  deployment imagedefinitions.json
 #      - printf '[{"name":"demo-flask-signup","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo Copying appspec.yml to root
