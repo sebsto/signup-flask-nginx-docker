@@ -30,14 +30,13 @@ phases:
       - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
 # ECS standard  deployment imagedefinitions.json
 #      - printf '[{"name":"demo-flask-signup","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo Copying appspec.yml to root
+      - echo Copying config files to root
       - cp build/appspec.yml appspec.yaml
-      - cp build/appspec.yml appspec.yml
-
+      - cp build/taskdef.json taskdef.json
 
 artifacts:
    files: 
        - imageDetail.json
        - appspec.yaml
-       - appspec.yml
+       - taskdef.json
   #  files: imagedefinitions.json

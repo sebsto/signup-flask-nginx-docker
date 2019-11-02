@@ -1,0 +1,28 @@
+{
+    "executionRoleArn": "arn:aws:iam::486652066693:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+      {
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "protocol": "tcp",
+            "containerPort": 80
+          }
+        ],
+        "image": "486652066693.dkr.ecr.us-west-2.amazonaws.com/demo-flask-signup",
+        "name": "demo-flask-signup"
+      }
+    ],
+    "memory": "512",
+    "taskRoleArn": "arn:aws:iam::486652066693:role/ecsTaskExecutionRole",
+    "compatibilities": [
+      "EC2",
+      "FARGATE"
+    ],
+    "family": "demo-flask-signup",
+    "requiresCompatibilities": [
+      "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256"
+  }
