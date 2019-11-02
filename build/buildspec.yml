@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version && docker --version && docker ps
-      - $(aws ecr get-login --region us-west-2 --no-include-email)
+      - $(aws ecr get-login --region $AWS_REGION --no-include-email)
       - REPOSITORY_URI=486652066693.dkr.ecr.$AWS_REGION.amazonaws.com/demo-flask-signup
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
