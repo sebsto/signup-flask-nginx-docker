@@ -1,10 +1,9 @@
-
 version: 0.0
 Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: arn:aws:ecs:us-west-2:486652066693:task-definition/demo-flask-signup:2
+        TaskDefinition: "arn:aws:ecs:us-west-2:486652066693:task-definition/demo-flask-signup:2"
         LoadBalancerInfo:
           ContainerName: "demo-flask-signup"
           ContainerPort: 80
