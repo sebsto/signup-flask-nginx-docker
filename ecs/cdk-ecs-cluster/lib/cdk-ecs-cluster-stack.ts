@@ -51,8 +51,10 @@ export class CdkEcsClusterStack extends cdk.Stack {
       desiredCount: 2  // Default is 1
     });
 
-    // Output the DNS where you can access your service
+    // Output the values we need to access your service
     new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: clusterService.loadBalancer.loadBalancerDnsName });
+    new cdk.CfnOutput(this, 'ECSClusterName', { value: clusterService.cluster.clusterName });
+    new cdk.CfnOutput(this, 'ECSServiceName', { value: clusterService.service.serviceName });
 
     // just for a demo to have quicker container registration
     clusterService.targetGroup.configureHealthCheck({
