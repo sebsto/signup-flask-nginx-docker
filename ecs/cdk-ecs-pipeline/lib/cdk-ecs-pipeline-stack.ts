@@ -24,6 +24,8 @@ import cdk = require('@aws-cdk/core');
 import pipeline = require('@aws-cdk/aws-codepipeline');
 import pipeline_actions = require('@aws-cdk/aws-codepipeline-actions');
 import codebuild = require('@aws-cdk/aws-codebuild');
+import kms = require('@aws-cdk/aws-kms');
+import s3 = require('@aws-cdk/aws-s3');
 import { BuildSpec } from '@aws-cdk/aws-codebuild';
 import { Role, ManagedPolicy } from '@aws-cdk/aws-iam'
 
@@ -45,8 +47,8 @@ export class CdkEcsPipelineStack extends cdk.Stack {
     });
 
     // create the build action
-    const buildProject = new codebuild.PipelineProject(this, 'CodeBuildProject', {
-      projectName: 'DockerBuild',
+    const buildProject = new codebuild.PipelineProject(this, 'ECSFlaskSignupCodeBuildProject', {
+      projectName: 'ECSFlaskSignupBuild',
       buildSpec: BuildSpec.fromSourceFilename('build/buildspec.yml'),
       environment: {
         buildImage: codebuild.LinuxBuildImage.STANDARD_2_0,
@@ -92,9 +94,17 @@ export class CdkEcsPipelineStack extends cdk.Stack {
     //   // imageFile: sourceOutput.atPath('imageDef.json'),
     // });
 
+    // workaround for a KMS key alias issue I have 
+    // https://github.com/aws/aws-cdk/issues/4374
+    const key = new kms.Key(this, 'Key');
+    const myArtifactBucket = new s3.Bucket(this, 'ECSDemoFlaskSignupBucket', {
+      encryptionKey: key, // no Alias here!
+    });
+    
     // finally, create the pipeline
-    const codePipeline = new pipeline.Pipeline(this, 'Pipeline', {
-      pipelineName: 'ECSDeploy',
+    const codePipeline = new pipeline.Pipeline(this, 'ECSDemoFlaskSignupPipeline', {
+      artifactBucket: myArtifactBucket,
+      pipelineName: 'ECSFlaskSignupDeploy',
       stages: [
         {
           stageName: 'GetSource',
