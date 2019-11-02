@@ -1,3 +1,5 @@
+## NOT USED ANYMORE - REPLACED BY CODE*
+
 #!/bin/bash
 SERVICE_NAME="flask-signup"
 #VERSION=`date +%y%m%d%H%M%S`"_"${BUILD_NUMBER}
